@@ -12,17 +12,17 @@ class Program
         string subreddit = "politics";
 
         int durationMillSec = 6 * 60 * 1000; // 6 minutes
-        int waitTimeToretrieveInfo = 3 * 60 * 1000; // 3 minutes       
+        int waitTimeToretrieveInfo = 3 * 60 * 1000; // 3 minutes
+                                                    // 
+        var tokenObj = new RetrieveAccessToken();
+        var topPostObject = new GetUserPosts();
 
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
 
         do
-        {
-            var tokenObj = new RetrieveAccessToken();
-            string accessToken = tokenObj.GetAccessTokenAsync().Result;
-
-            var topPostObject = new GetUserPosts();
+        {          
+            string accessToken = tokenObj.GetAccessTokenAsync().Result;          
 
             var upVotePost = topPostObject.PostsWithMostUpVotes(subreddit, accessToken).Result;
 
