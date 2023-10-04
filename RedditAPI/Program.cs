@@ -12,19 +12,18 @@ class Program
 
         int durationMillSec = 6 * 60 * 1000; // 6 minutes
         int waitTimeToretrieveInfo = 3 * 60 * 1000; // 3 minutes
-
+        var tokenObj = new RetrieveAccessToken();
+        var topPostObject = new GetUserPosts();
 
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
 
         do
         {
-            var tokenObj = new RetrieveAccessToken();
-            string accessToken = tokenObj.GetAccessTokenAsync().Result;
+           
+            string accessToken = tokenObj.GetAccessTokenAsync().Result;           
 
-            var topPostObject = new GetUserPosts();
-
-            var upVotePost = topPostObject.PostsWithMostUpVotes(subreddit, accessToken).Result;
+            var upVotePost = topPostObject.GetPostsWithMostUpVotes(subreddit, accessToken).Result;
 
             int i = 0;
             Console.WriteLine("================ Report for top 5 Post with Most Up Votes ========================");
@@ -36,7 +35,7 @@ class Program
                 i++;
                 if (i == 5) break;
             }
-            var topPosts = topPostObject.GetUserWithMostPostsAsyn(subreddit, accessToken).Result;
+            var topPosts = topPostObject.GetUsersWithMostPostsAsyn(subreddit, accessToken).Result;
             Console.WriteLine("================ Report for top 5 Users with Most Posts ========================");
             foreach (var post in topPosts)
             {

@@ -10,13 +10,13 @@ namespace RedditAPI.Service
 {
     public class GetUserPosts
     {        
-        public async Task<Dictionary<string, int>> GetUserWithMostPostsAsyn(string subredditname,  string accessToken)
+        public async Task<Dictionary<string, int>> GetUsersWithMostPostsAsyn(string subredditname,  string accessToken)
         {
 
             var posts = await GetSubredditPostsAsync(subredditname, "new", 1000, accessToken);           
             var userPostsCount = CountUserPosts(posts);
             
-            var sortedUsers = userPostsCount.OrderByDescending(kv => kv.Value);
+            var sortedUsers = userPostsCount.OrderByDescending(keyValue => keyValue.Value);
 
             var topUsers = new Dictionary<string, int>();           
             foreach (var user in sortedUsers.Take(5))  
@@ -27,7 +27,7 @@ namespace RedditAPI.Service
             return topUsers;
         }
 
-        public async Task<Dictionary<string, int>> PostsWithMostUpVotes(string subRedditName, string accessToken)
+        public async Task<Dictionary<string, int>> GetPostsWithMostUpVotes(string subRedditName, string accessToken)
         {
             var topPosts = await GetSubredditPostsAsync(subRedditName, "top", 1000, accessToken);
 
@@ -36,7 +36,7 @@ namespace RedditAPI.Service
             foreach (var post in topPosts)
             {
                 string title = post["data"]["title"].ToString();
-                int score = int.Parse(post["data"]["score"].ToString());
+                int score = int.Parse(post["data"]["ups"].ToString());
                 topPostsDictionary.Add(title, score);
             }
             return SortDictionaryByValues(topPostsDictionary);
@@ -85,12 +85,12 @@ namespace RedditAPI.Service
         }
         static Dictionary<TKey, TValue> SortDictionaryByValues<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
         {
-            var sortedPairs = dictionary.OrderByDescending(kvp => kvp.Value);
+            var sortedPairs = dictionary.OrderByDescending(KeyValue => KeyValue.Value);
 
             var sortedDictionary = new Dictionary<TKey, TValue>();
-            foreach (var kvp in sortedPairs)
+            foreach (var KeyValue in sortedPairs)
             {
-                sortedDictionary.Add(kvp.Key, kvp.Value);
+                sortedDictionary.Add(KeyValue.Key, KeyValue.Value);
             }
             return sortedDictionary;
         }
