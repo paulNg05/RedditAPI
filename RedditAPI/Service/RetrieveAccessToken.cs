@@ -3,10 +3,11 @@ using System.Net.Http;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RedditAPI.Model;
 
 namespace RedditAPI.Service
 {
-    public class RetrieveAccessToken
+    public class RetrieveAccessToken : IRetrieveAccessToken
     {
 
         private string clientId = "0RDV33GD8F-yh73dP7sHsw";
@@ -19,26 +20,26 @@ namespace RedditAPI.Service
         ObjectCache cacheToken = MemoryCache.Default;
         public async Task<string> GetAccessTokenAsync()
         {
-
+            // check caChes to see if token exist
             access_token = (string)cacheToken["AccessToken"];
 
             if (access_token == null)
-            {                 
-                    using (HttpClient httpClient = new HttpClient())
+            {
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    var content = new FormUrlEncodedContent(new[]
                     {
-                        var content = new FormUrlEncodedContent(new[]
-                        {
                             new KeyValuePair<string, string>("grant_type", "password"),
                             new KeyValuePair<string, string>("username", username),
                             new KeyValuePair<string, string>("password", password)
                         });
 
-                        httpClient.DefaultRequestHeaders.Add("User-Agent", "puppyParser");
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", "puppyParser");
 
-                        var authHeaderValue = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
-                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {authHeaderValue}");
+                    var authHeaderValue = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {authHeaderValue}");
 
-                        var response = await httpClient.PostAsync("https://www.reddit.com/api/v1/access_token", content);
+                    var response = await httpClient.PostAsync("https://www.reddit.com/api/v1/access_token", content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -46,7 +47,7 @@ namespace RedditAPI.Service
                         dynamic tokenResponse = JsonConvert.DeserializeObject(responseContent);
                         string accessToken = tokenResponse.access_token;
                         access_token = accessToken;
-                        int expire_in = (int) tokenResponse.expires_in;
+                        int expire_in = (int)tokenResponse.expires_in;
                         CacheItemPolicy policy = new CacheItemPolicy
                         {
                             AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(expire_in)
@@ -56,7 +57,7 @@ namespace RedditAPI.Service
                     else
                     {
                         throw new Exception($"Error: {response.StatusCode}");
-                    }                    
+                    }
                 }
             }
             return access_token;

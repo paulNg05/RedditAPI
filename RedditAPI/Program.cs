@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using RedditAPI.Model;
 using RedditAPI.Service;
 
 class Program
@@ -11,17 +12,17 @@ class Program
         string subreddit = "politics";
 
         int durationMillSec = 6 * 60 * 1000; // 6 minutes
-        int waitTimeToretrieveInfo = 3 * 60 * 1000; // 3 minutes
-
+        int waitTimeToretrieveInfo = 3 * 60 * 1000; // 3 minutes       
 
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
 
         do
-        {
+        {   
+
             var tokenObj = new RetrieveAccessToken();
             string accessToken = tokenObj.GetAccessTokenAsync().Result;
-
+            
             var topPostObject = new GetUserPosts();
 
             var upVotePost = topPostObject.PostsWithMostUpVotes(subreddit, accessToken).Result;
@@ -36,7 +37,7 @@ class Program
                 i++;
                 if (i == 5) break;
             }
-            var topPosts = topPostObject.GetUserWithMostPostsAsyn(subreddit, accessToken).Result;
+            var topPosts = topPostObject.GetUsersWithMostPostsAsyn(subreddit, accessToken).Result;
             Console.WriteLine("================ Report for top 5 Users with Most Posts ========================");
             foreach (var post in topPosts)
             {
