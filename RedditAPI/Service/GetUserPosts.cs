@@ -14,16 +14,19 @@ namespace RedditAPI.Service
     {
 
         private RadditRateLimitInfo rateLimitInfo = new();
-        
+        private readonly IRetrieveAccessToken _retrieveAccessToken;
 
+        public GetUserPosts(IRetrieveAccessToken retrieveAccessToken)
+        {
+            _retrieveAccessToken = retrieveAccessToken;
+        }
         public async Task<Dictionary<string, int>> GetUsersWithMostPostsAsyn(string subredditname, string accessToken)
         {
             if (rateLimitInfo.RemainingCalls == 0 && rateLimitInfo.Reset != 0)
             {
                 // delay for the Reset time and call to get new token
                 await Task.Delay(rateLimitInfo.Reset);
-                var tokenObj = new RetrieveAccessToken();
-                accessToken = await tokenObj.GetAccessTokenAsync();
+                await _retrieveAccessToken.GetAccessTokenAsync();
             }
 
             var posts = await GetSubredditPostsAsync(subredditname, "new", 1000, accessToken);
@@ -46,8 +49,7 @@ namespace RedditAPI.Service
             {
                 // delay for the Reset time and call to get new token
                 await Task.Delay(rateLimitInfo.Reset);
-                var tokenObj = new RetrieveAccessToken();
-                accessToken = await tokenObj.GetAccessTokenAsync();
+                await _retrieveAccessToken.GetAccessTokenAsync();
             }
             var topPosts = await GetSubredditPostsAsync(subRedditName, "top", 1000, accessToken);
 
