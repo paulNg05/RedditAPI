@@ -18,11 +18,10 @@ class Program
         stopwatch.Start();
 
         do
-        {   
-
+        {
             var tokenObj = new RetrieveAccessToken();
             string accessToken = tokenObj.GetAccessTokenAsync().Result;
-            
+
             var topPostObject = new GetUserPosts();
 
             var upVotePost = topPostObject.PostsWithMostUpVotes(subreddit, accessToken).Result;
