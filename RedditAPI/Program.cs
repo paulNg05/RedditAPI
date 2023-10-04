@@ -2,11 +2,23 @@
 using System.Diagnostics;
 using RedditAPI.Model;
 using RedditAPI.Service;
+using Microsoft.Extensions.DependencyInjection;
 
 class Program
 {
     static async Task Main(string[] args)
     {
+
+        // setup DI
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton<IRetrieveAccessToken, RetrieveAccessToken>()
+            .AddSingleton<IGetUserPosts, GetUserPosts>()
+            .BuildServiceProvider();
+
+        var tokenObj = serviceProvider.GetService<IRetrieveAccessToken>();
+        var topPostObject = serviceProvider.GetRequiredService<IGetUserPosts>();
+
+
         Console.WriteLine("Welcome to my Reddit API app");
 
         string subreddit = "politics";
@@ -14,8 +26,8 @@ class Program
         int durationMillSec = 6 * 60 * 1000; // 6 minutes
         int waitTimeToretrieveInfo = 3 * 60 * 1000; // 3 minutes
                                                     // 
-        var tokenObj = new RetrieveAccessToken();
-        var topPostObject = new GetUserPosts();
+        //var tokenObj = new RetrieveAccessToken();
+        //var topPostObject = new GetUserPosts();
 
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
