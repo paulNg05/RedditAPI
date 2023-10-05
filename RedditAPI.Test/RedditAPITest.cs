@@ -59,10 +59,10 @@ namespace RedditAPI.Test
             mostUpvoteMock.Setup(d => d.PostsWithMostUpVotes(post, token)).ReturnsAsync(upMostPost);
 
             //Act 
-            var result = mostUpVote.PostsWithMostUpVotes(post, token);
+            var result = mostUpVote.PostsWithMostUpVotes(post, token).Result;
 
             //Assert
-            Assert.Equals(upMostPost, result);
+            Assert.AreEqual(upMostPost, result);
         
         }
     }  
