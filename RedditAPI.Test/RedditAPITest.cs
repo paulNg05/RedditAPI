@@ -56,13 +56,33 @@ namespace RedditAPI.Test
             { {"Inflation Is under Control", 1000 } };
 
             //Set up behavior
-            mostUpvoteMock.Setup(d => d.PostsWithMostUpVotes(post, token)).ReturnsAsync(upMostPost);
+            mostUpvoteMock.Setup(d => d.GetPostsWithMostUpVotesAsync(post, token)).ReturnsAsync(upMostPost);
 
             //Act 
-            var result = mostUpVote.PostsWithMostUpVotes(post, token).Result;
+            var result = mostUpVote.GetPostsWithMostUpVotesAsync(post, token).Result;
 
             //Assert
             Assert.AreEqual(upMostPost, result);        
+        }
+
+        [TestMethod]
+        public void GetMostUpVotePost_return_EmptyDictionary()
+        {
+            //Arrange
+            var mostUpvoteMock = new Mock<IGetUserPosts>();
+            var mostUpVote = mostUpvoteMock.Object;
+            string post = "business";
+            string token = "ABC_eFg_234_eng";
+            var upMostPost = new Dictionary<string, int>();
+            
+            //Set up behavior
+            mostUpvoteMock.Setup(d => d.GetPostsWithMostUpVotesAsync(post, token)).ReturnsAsync(upMostPost);
+
+            //Act 
+            var result = mostUpVote.GetPostsWithMostUpVotesAsync(post, token).Result;
+
+            //Assert
+            Assert.AreEqual(upMostPost, result);
         }
 
         [TestMethod]
@@ -77,10 +97,30 @@ namespace RedditAPI.Test
             { {"_entrepreneur1234", 10 } };
 
             //Set up behavior
-            userWithMostPostMock.Setup(d => d.GetUsersWithMostPostsAsyn(post, token)).ReturnsAsync(userWithMostPost);
+            userWithMostPostMock.Setup(d => d.GetUsersWithMostPostsAsync(post, token)).ReturnsAsync(userWithMostPost);
 
             //Act 
-            var result = userMostPost.GetUsersWithMostPostsAsyn(post, token).Result;
+            var result = userMostPost.GetUsersWithMostPostsAsync(post, token).Result;
+
+            //Assert
+            Assert.AreEqual(userWithMostPost, result);
+        }
+
+        [TestMethod]
+        public void GetUserWithMostPost_rturn_EmptyDictionary()
+        {
+            //Arrange
+            var userWithMostPostMock = new Mock<IGetUserPosts>();
+            var userMostPost = userWithMostPostMock.Object;
+            string post = "business";
+            string token = "ABC_eFg_234_eng";
+            var userWithMostPost = new Dictionary<string, int>();          
+
+            //Set up behavior
+            userWithMostPostMock.Setup(d => d.GetUsersWithMostPostsAsync(post, token)).ReturnsAsync(userWithMostPost);
+
+            //Act 
+            var result = userMostPost.GetUsersWithMostPostsAsync(post, token).Result;
 
             //Assert
             Assert.AreEqual(userWithMostPost, result);

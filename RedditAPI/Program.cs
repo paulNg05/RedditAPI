@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using RedditAPI.Model;
 using RedditAPI.Service;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,7 +17,7 @@ class Program
         var tokenObj = serviceProvider.GetService<IRetrieveAccessToken>();
         var topPostObject = serviceProvider.GetRequiredService<IGetUserPosts>();
 
-         
+
         Console.WriteLine("Welcome to my Reddit API app");
 
         string subreddit = "politics";
@@ -30,9 +29,9 @@ class Program
         stopwatch.Start();
 
         do
-        {          
-            string accessToken = await tokenObj.GetAccessTokenAsync(); 
-            var upVotePost = await topPostObject.PostsWithMostUpVotes(subreddit, accessToken);
+        {
+            string accessToken = await tokenObj.GetAccessTokenAsync();
+            var upVotePost = await topPostObject.GetPostsWithMostUpVotesAsync(subreddit, accessToken);
 
             int i = 0;
             Console.WriteLine("================ Report for top 5 Post with Most Up Votes ========================");
@@ -44,7 +43,7 @@ class Program
                 i++;
                 if (i == 5) break;
             }
-            var topPosts = await topPostObject.GetUsersWithMostPostsAsyn(subreddit, accessToken);
+            var topPosts = await topPostObject.GetUsersWithMostPostsAsync(subreddit, accessToken);
             Console.WriteLine("================ Report for top 5 Users with Most Posts ========================");
             foreach (var post in topPosts)
             {
@@ -58,5 +57,5 @@ class Program
         stopwatch.Stop();
         Console.WriteLine();
         Console.WriteLine("Thank you for using my Reddit API app. Have a good day! ");
-    }   
+    }
 }

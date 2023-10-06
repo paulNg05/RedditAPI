@@ -2,7 +2,7 @@
 {
     public interface IGetUserPosts
     {
-        Task<Dictionary<string, int>> GetUsersWithMostPostsAsyn(string subredditname, string accessToken);
-        Task<Dictionary<string, int>> PostsWithMostUpVotes(string subRedditName, string accessToken);
+        Task<Dictionary<string, int>> GetUsersWithMostPostsAsync(string subredditname, string accessToken);
+        Task<Dictionary<string, int>> GetPostsWithMostUpVotesAsync(string subRedditName, string accessToken);
     }
 }

@@ -4,9 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace RedditAPI.Service
 {
@@ -20,7 +17,7 @@ namespace RedditAPI.Service
         {
             _retrieveAccessToken = retrieveAccessToken;
         }
-        public async Task<Dictionary<string, int>> GetUsersWithMostPostsAsyn(string subredditname, string accessToken)
+        public async Task<Dictionary<string, int>> GetUsersWithMostPostsAsync(string subredditname, string accessToken)
         {
             if (rateLimitInfo.RemainingCalls == 0 && rateLimitInfo.Reset != 0)
             {
@@ -43,7 +40,7 @@ namespace RedditAPI.Service
             return topUsers;
         }
 
-        public async Task<Dictionary<string, int>> PostsWithMostUpVotes(string subRedditName, string accessToken)
+        public async Task<Dictionary<string, int>> GetPostsWithMostUpVotesAsync(string subRedditName, string accessToken)
         {
             if (rateLimitInfo.RemainingCalls == 0 && rateLimitInfo.Reset != 0)
             {

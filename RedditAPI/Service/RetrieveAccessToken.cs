@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using RedditAPI.Model;
 
 namespace RedditAPI.Service
 {
